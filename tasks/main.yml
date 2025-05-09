@@ -1,2 +1,5 @@
 # tasks/main.yml
 ---
+- name: "Install asdf"
+  ansible.builtin.import_tasks: "install.yml"
+  tags: [asdf, install]
