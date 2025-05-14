@@ -1,3 +1,5 @@
 # molecule/default/vars/all.yml
 ---
 test_file: /etc
+
+asdf_binary: /usr/local/bin/asdf

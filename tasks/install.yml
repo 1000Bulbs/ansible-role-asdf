@@ -9,4 +9,55 @@
   register: apt_deps_result
   until: apt_deps_result is succeeded
   when: ansible_os_family == "Debian"
-  tags: [asdf]
+  tags: [asdf, asdf-install]
+
+- name: Construct archive filename
+  ansible.builtin.set_fact:
+    asdf_archive: asdf-v{{ asdf_version }}-{{ asdf_os }}-{{ asdf_arch }}.tar.gz
+  tags: [asdf, asdf-install]
+
+- name: Construct archive download URL
+  ansible.builtin.set_fact:
+    asdf_download_url: https://github.com/asdf-vm/asdf/releases/download/v{{ asdf_version }}/{{ asdf_archive }}
+  tags: [asdf, asdf-install]
+
+- name: Create persistent directory for download and extraction
+  ansible.builtin.file:
+    path: /tmp/asdf-download
+    state: directory
+    mode: "0755"
+  tags: [asdf, asdf-install]
+
+- name: Check if asdf archive already exists
+  ansible.builtin.stat:
+    path: /tmp/asdf-download/{{ asdf_archive }}
+  register: asdf_archive_stat
+  tags: [asdf, asdf-install]
+
+- name: Download asdf archive
+  ansible.builtin.get_url:
+    url: "{{ asdf_download_url }}"
+    dest: /tmp/asdf-download/{{ asdf_archive }}
+    mode: "0644"
+  when: not asdf_archive_stat.stat.exists
+  tags: [asdf, asdf-install]
+
+- name: Extract asdf binary
+  ansible.builtin.unarchive:
+    src: /tmp/asdf-download/{{ asdf_archive }}
+    dest: /tmp/asdf-download
+    remote_src: true
+  args:
+    creates: /tmp/asdf-download/asdf
+  tags: [asdf, asdf-install]
+
+- name: Move asdf binary to final destination
+  ansible.builtin.copy:
+    src: /tmp/asdf-download/asdf
+    dest: "{{ asdf_bin_path }}"
+    owner: root
+    group: root
+    mode: "0755"
+    remote_src: true
+    force: false
+  tags: [asdf, asdf-install]

@@ -1,3 +1,5 @@
 # defaults/main.yml
 ---
 asdf_version: 0.16.7
+asdf_bin_dir: /usr/local/bin
+asdf_bin_path: "{{ asdf_bin_dir }}/asdf"
