@@ -1,2 +1,31 @@
 # tasks/main.yml
 ---
+- name: Determine OS name
+  ansible.builtin.set_fact:
+    asdf_os: >-
+      {{ "linux" if ansible_system == "Linux" else "unsupported" }}
+  tags: [asdf]
+
+- name: Determine architecture
+  ansible.builtin.set_fact:
+    asdf_arch: >-
+      {{ "amd64" if ansible_architecture in ["x86_64"]
+         else "arm64" if ansible_architecture in ["aarch64"]
+         else "unsupported" }}
+  tags: [asdf]
+
+- name: Fail if unsupported OS or architecture
+  ansible.builtin.fail:
+    msg: "Unsupported platform: {{ ansible_system }} {{ ansible_architecture }}"
+  when: asdf_os == "unsupported" or asdf_arch == "unsupported"
+  tags: [asdf]
+
+- name: Ensure asdf version is >= 0.16.0 (Go-based binary)
+  ansible.builtin.assert:
+    that:
+      - asdf_version is version("0.16.0", ">=")
+    fail_msg: >
+      asdf version {{ asdf_version }} is not supported.
+      This role only works with the new Go-based version of asdf (>= 0.16.0).
+    success_msg: asdf version {{ asdf_version }} is supported (Go-based).
+  tags: [asdf]
