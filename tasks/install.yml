@@ -1,0 +1,12 @@
+---
+- name: Install asdf global dependencies with apt
+  ansible.builtin.apt:
+    name: "{{ asdf_global_dependencies }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  become: true
+  retries: "{{ remote_package_retries }}"
+  register: apt_deps_result
+  until: apt_deps_result is succeeded
+  when: ansible_os_family == "Debian"
+  tags: [asdf]

@@ -1,2 +1,20 @@
 # vars/main.yml
 ---
+apt_cache_valid_time: 86400
+remote_package_retries: 5
+
+asdf_global_dependencies:
+  - autoconf
+  - automake
+  - binutils
+  - bison
+  - curl
+  - g++
+  - gcc
+  - git
+  - libreadline-dev
+  - libtool
+  - make
+  - patch
+  - pkg-config
+  - unzip

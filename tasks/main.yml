@@ -29,3 +29,7 @@
       This role only works with the new Go-based version of asdf (>= 0.16.0).
     success_msg: asdf version {{ asdf_version }} is supported (Go-based).
   tags: [asdf]
+
+- name: Install asdf
+  ansible.builtin.import_tasks: install.yml
+  tags: [asdf, asdf-install]
