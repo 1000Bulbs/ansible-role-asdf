@@ -30,6 +30,23 @@
     success_msg: asdf version {{ asdf_version }} is supported (Go-based).
   tags: [asdf]
 
+- name: Get asdf_user info
+  ansible.builtin.getent:
+    database: passwd
+    key: "{{ asdf_user }}"
+  tags: [asdf]
+
+- name: Set asdf_user home
+  ansible.builtin.set_fact:
+    asdf_user_home: "{{ getent_passwd[asdf_user][4] }}"
+  tags: [asdf]
+
+- name: Set asdf_dir
+  ansible.builtin.set_fact:
+    asdf_dir: "{{ asdf_user_home }}/.asdf"
+  when: asdf_dir is undefined
+  tags: [asdf]
+
 - name: Install asdf
   ansible.builtin.import_tasks: install.yml
   tags: [asdf, asdf-install]

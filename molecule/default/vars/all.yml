@@ -3,3 +3,9 @@
 test_file: /etc
 
 asdf_binary: /usr/local/bin/asdf
+
+asdf_user: deploy
+
+asdf_plugins:
+  - name: ruby
+  - name: nodejs

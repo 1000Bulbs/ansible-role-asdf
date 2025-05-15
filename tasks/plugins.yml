@@ -10,3 +10,16 @@
   become: true
   when: ansible_os_family == "Debian"
   tags: [asdf, asdf-plugins]
+
+- name: Install plugins
+  ansible.builtin.command: >
+    asdf plugin add {{ item.name }} {{ item.repository | default('') }}
+  args:
+    creates: "{{ asdf_dir }}/plugins/{{ item.name }}"
+  loop: "{{ asdf_plugins }}"
+  when: asdf_plugins | length > 0
+  become: true
+  become_user: "{{ asdf_user }}"
+  register: plugin_add_result
+  failed_when: false
+  tags: [asdf, asdf-plugins]
