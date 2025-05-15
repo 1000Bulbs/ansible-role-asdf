@@ -54,3 +54,15 @@
   become: true
   become_user: "{{ asdf_user }}"
   tags: [asdf, asdf-plugins]
+
+- name: Uninstall plugin versions
+  ansible.builtin.command: >
+    asdf uninstall {{ item.0.name }} {{ item.1 }}
+  args:
+    removes: "{{ asdf_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  loop: "{{ asdf_plugins | subelements('uninstall', skip_missing=True) }}"
+  when: asdf_plugins | length > 0
+  become: true
+  become_user: "{{ asdf_user }}"
+  changed_when: false
+  tags: [asdf, asdf-plugins]

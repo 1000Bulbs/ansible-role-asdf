@@ -15,6 +15,9 @@ asdf_plugins:
       - 23.11.0
       - 22.15.0
     default: 23.11.0
+  - name: act
+    uninstall:
+      - 0.2.77
 
 asdf_ruby_dependencies:
   - libdb-dev

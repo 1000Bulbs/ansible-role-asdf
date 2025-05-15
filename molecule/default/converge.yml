@@ -19,6 +19,28 @@
         shell: /bin/bash
         state: present
 
+    - name: Create plugin install directory for act
+      ansible.builtin.file:
+        path: /home/deploy/.asdf/installs/act/0.2.77/bin
+        state: directory
+        mode: "0755"
+        owner: deploy
+        group: deploy
+      become: true
+      become_user: deploy
+      changed_when: false
+
+    - name: Copy act binary to install directory
+      ansible.builtin.copy:
+        src: files/act
+        dest: /home/deploy/.asdf/installs/act/0.2.77/bin/act
+        owner: deploy
+        group: deploy
+        mode: "0755"
+      become: true
+      become_user: deploy
+      changed_when: false
+
     - name: Set asdf_plugins
       ansible.builtin.set_fact:
         asdf_plugins:
@@ -30,6 +52,9 @@
               - 23.11.0
               - 22.15.0
             default: 23.11.0
+          - name: act
+            uninstall:
+              - 0.2.77
 
   roles:
     - { role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}" }

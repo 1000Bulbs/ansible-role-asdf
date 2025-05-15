@@ -10,17 +10,28 @@ asdf_plugins = vars["asdf_plugins"]
 
 plugin_names = [plugin["name"] for plugin in asdf_plugins]
 
+uninstall_versions = [
+    (plugin["name"], version)
+    for plugin in asdf_plugins
+    if "uninstall" in plugin
+    for version in plugin["uninstall"]
+]
+
 plugin_versions = [
     (plugin["name"], version)
     for plugin in asdf_plugins
     if "install" in plugin
     for version in plugin["install"]
+    if (plugin["name"], version) not in uninstall_versions
 ]
 
 default_versions = [
     (plugin["name"], plugin.get("default", plugin["install"][0]))
     for plugin in asdf_plugins
-    if "install" in plugin and plugin["install"]
+    if "install" in plugin
+    and plugin["install"]
+    and (plugin["name"], plugin.get("default", plugin["install"][0]))
+    not in uninstall_versions
 ]
 
 
@@ -88,3 +99,18 @@ def test_asdf_default_versions(host, plugin, expected_default):
             break
     else:
         assert False
+
+
+@pytest.mark.parametrize("plugin,uninstall_version", uninstall_versions)
+def test_act_uninstall_absence(host, plugin, uninstall_version):
+    home = host.user(asdf_user).home
+    path = f"{home}/.asdf/installs/{plugin}/{uninstall_version}"
+    d = host.file(path)
+    assert not d.exists
+
+
+@pytest.mark.parametrize("plugin,uninstall_version", uninstall_versions)
+def test_act_not_listed_after_uninstall(host, plugin, uninstall_version):
+    cmd = host.run(f"sudo -u {asdf_user} asdf list {plugin}")
+    installed = [line.strip().lstrip("*").strip() for line in cmd.stdout.splitlines()]
+    assert uninstall_version not in installed
