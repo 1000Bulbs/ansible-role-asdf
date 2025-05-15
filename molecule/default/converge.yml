@@ -23,7 +23,12 @@
       ansible.builtin.set_fact:
         asdf_plugins:
           - name: ruby
+            install:
+              - 3.4.3
           - name: nodejs
+            install:
+              - 23.11.0
+              - 22.15.0
 
   roles:
     - { role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}" }

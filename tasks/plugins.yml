@@ -30,3 +30,14 @@
   when: >
     lookup("ansible.builtin.file", role_path ~ "/tasks/plugins/" ~ item.name ~ ".yml", errors="ignore") is not none
   tags: [asdf, asdf-plugins]
+
+- name: Install plugin versions
+  ansible.builtin.command: >
+    asdf install {{ item.0.name }} {{ item.1 }}
+  args:
+    creates: "{{ asdf_dir }}/installs/{{ item.0.name }}/{{ item.1 }}"
+  loop: "{{ asdf_plugins | subelements('install', skip_missing=True) }}"
+  when: asdf_plugins | length > 0
+  become: true
+  become_user: "{{ asdf_user }}"
+  tags: [asdf, asdf-plugins]
