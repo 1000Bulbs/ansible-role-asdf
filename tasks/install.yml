@@ -61,3 +61,13 @@
     remote_src: true
     force: false
   tags: [asdf, asdf-install]
+
+- name: Source asdf script
+  ansible.builtin.template:
+    src: asdf.sh.j2
+    dest: "{{ asdf_script_file }}"
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+  tags: [asdf, asdf-install]

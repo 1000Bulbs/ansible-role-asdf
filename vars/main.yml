@@ -18,3 +18,5 @@ asdf_global_dependencies:
   - patch
   - pkg-config
   - unzip
+
+asdf_script_file: /etc/profile.d/asdf.sh
