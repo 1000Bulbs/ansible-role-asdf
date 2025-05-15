@@ -20,3 +20,19 @@ asdf_global_dependencies:
   - unzip
 
 asdf_script_file: /etc/profile.d/asdf.sh
+
+asdf_ruby_dependencies:
+  - libdb-dev
+  - libffi-dev
+  - libgdbm-dev
+  - libgmp-dev
+  - libmysqlclient-dev
+  - libncurses-dev
+  - libpq-dev
+  - libreadline-dev
+  - libssl-dev
+  - libyaml-dev
+  - patch
+  - rustc
+  - uuid-dev
+  - zlib1g-dev

@@ -1,0 +1,11 @@
+---
+- name: Install ruby dependencies
+  ansible.builtin.apt:
+    name: "{{ asdf_ruby_dependencies }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_ruby_result
+  until: apt_ruby_result is succeeded
+  become: true
+  when: ansible_os_family == "Debian"

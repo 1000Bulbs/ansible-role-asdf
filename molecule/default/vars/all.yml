@@ -9,3 +9,19 @@ asdf_user: deploy
 asdf_plugins:
   - name: ruby
   - name: nodejs
+
+asdf_ruby_dependencies:
+  - libdb-dev
+  - libffi-dev
+  - libgdbm-dev
+  - libgmp-dev
+  - libmysqlclient-dev
+  - libncurses-dev
+  - libpq-dev
+  - libreadline-dev
+  - libssl-dev
+  - libyaml-dev
+  - patch
+  - rustc
+  - uuid-dev
+  - zlib1g-dev
