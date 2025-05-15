@@ -71,3 +71,22 @@
     mode: "0755"
   become: true
   tags: [asdf, asdf-install]
+
+- name: Set Debian bashrc file
+  ansible.builtin.set_fact:
+    bashrc_file: /etc/bash.bashrc
+  when: ansible_os_family == "Debian"
+  tags: [asdf, asdf-install]
+
+- name: Add bash completion
+  ansible.builtin.lineinfile:
+    path: "{{ bashrc_file }}"
+    line: . <(asdf completion bash)
+    create: true
+    state: present
+    insertafter: EOF
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  tags: [asdf, asdf-install]
