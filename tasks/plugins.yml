@@ -1,0 +1,12 @@
+---
+- name: Install plugin dependencies
+  ansible.builtin.apt:
+    name: "{{ asdf_plugin_dependencies }}"
+    install_recommends: false
+    cache_valid_time: "{{ apt_cache_valid_time }}"
+  retries: "{{ remote_package_retries }}"
+  register: apt_result
+  until: apt_result is succeeded
+  become: true
+  when: ansible_os_family == "Debian"
+  tags: [asdf, asdf-plugins]

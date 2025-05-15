@@ -33,3 +33,7 @@
 - name: Install asdf
   ansible.builtin.import_tasks: install.yml
   tags: [asdf, asdf-install]
+
+- name: Install plugins
+  ansible.builtin.import_tasks: plugins.yml
+  tags: [asdf, asdf-plugins]
