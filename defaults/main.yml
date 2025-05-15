@@ -7,6 +7,8 @@ asdf_user: deploy
 asdf_bin_dir: /usr/local/bin
 asdf_bin_path: "{{ asdf_bin_dir }}/asdf"
 
+asdf_legacy_version_file: "yes"
+
 asdf_plugin_dependencies: []
 
 asdf_plugins: []

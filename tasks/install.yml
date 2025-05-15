@@ -90,3 +90,13 @@
     mode: "0644"
   become: true
   tags: [asdf, asdf-install]
+
+- name: Create asdf config file
+  ansible.builtin.template:
+    src: asdfrc.j2
+    dest: "{{ asdf_config_file }}"
+    owner: "{{ asdf_user }}"
+    group: "{{ asdf_user }}"
+    mode: "0644"
+  become: true
+  become_user: "{{ asdf_user }}"

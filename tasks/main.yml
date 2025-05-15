@@ -53,6 +53,12 @@
   when: asdf_tool_versions_file is undefined
   tags: [asdf]
 
+- name: Set asdf_user config file
+  ansible.builtin.set_fact:
+    asdf_config_file: "{{ asdf_user_home }}/.asdfrc"
+  when: asdf_config_file is undefined
+  tags: [asdf]
+
 - name: Install asdf
   ansible.builtin.import_tasks: install.yml
   tags: [asdf, asdf-install]
