@@ -17,6 +17,12 @@ plugin_versions = [
     for version in plugin["install"]
 ]
 
+default_versions = [
+    (plugin["name"], plugin.get("default", plugin["install"][0]))
+    for plugin in asdf_plugins
+    if "install" in plugin and plugin["install"]
+]
+
 
 @pytest.mark.parametrize("plugin", plugin_names)
 def test_plugin_directory_exists(host, plugin):
@@ -62,3 +68,23 @@ def test_asdf_list_versions(host, plugin, version):
     assert cmd.rc == 0
     installed = [line.strip() for line in cmd.stdout.splitlines() if line.strip()]
     assert any(version in line for line in installed)
+
+
+@pytest.mark.parametrize("plugin,expected_default", default_versions)
+def test_asdf_default_versions(host, plugin, expected_default):
+    """
+    Verify `asdf current <plugin>` shows the expected default version.
+    """
+    cmd = host.run(f"sudo -u {asdf_user} asdf current {plugin}")
+    assert cmd.rc == 0
+
+    lines = [line for line in cmd.stdout.splitlines() if line.strip()]
+    assert len(lines) >= 1
+
+    for line in lines:
+        if plugin in line:
+            parts = line.split()
+            assert expected_default in parts
+            break
+    else:
+        assert False

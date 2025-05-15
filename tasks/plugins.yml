@@ -41,3 +41,16 @@
   become: true
   become_user: "{{ asdf_user }}"
   tags: [asdf, asdf-plugins]
+
+- name: Set default plugin versions
+  ansible.builtin.command: >
+    asdf set -u {{ item.name }} {{ item.default | default(item.install[0]) }}
+  loop: "{{ asdf_plugins }}"
+  when:
+    - item.install is defined
+    - item.install | length > 0
+  register: set_result
+  changed_when: "'Updated' in set_result.stdout"
+  become: true
+  become_user: "{{ asdf_user }}"
+  tags: [asdf, asdf-plugins]

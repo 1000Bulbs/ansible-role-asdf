@@ -14,6 +14,7 @@ asdf_plugins:
     install:
       - 23.11.0
       - 22.15.0
+    default: 23.11.0
 
 asdf_ruby_dependencies:
   - libdb-dev
